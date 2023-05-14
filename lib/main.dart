@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import './widgets/user_transaction.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -15,43 +17,43 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class MyHomePage extends StatelessWidget {
+  MyHomePage({super.key});
 
-  final String title;
+  // final String title;
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
+  final titleController = TextEditingController();
+  final amountController = TextEditingController();
 
-class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: const Text("Personel Expenses"),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Card(
-            color: Colors.blue,
-            child: Container(
-              padding: EdgeInsets.all(10),
-              width: double.infinity,
-              child: Text("Chart!! "),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Card(
+              color: Colors.blue,
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                width: double.infinity,
+                height: 100,
+                alignment: Alignment.center,
+                child: const Text("Chart!! "),
+              ),
             ),
-          ),
-          Card(
-            child: Text("List of Transactions"),
-          ),
-        ],
+            UserTransactions(),
+          ],
+        ),
       ),
     );
   }
