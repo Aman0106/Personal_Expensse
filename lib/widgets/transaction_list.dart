@@ -10,9 +10,10 @@ class TransactionsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 400,
-      child: ListView(
-        children: _userTransactions.map((txn) {
+      height: 300,
+      child: ListView.builder(
+        itemCount: _userTransactions.length,
+        itemBuilder: (context, index) {
           return Card(
             color: Colors.white70,
             elevation: 2,
@@ -23,34 +24,29 @@ class TransactionsList extends StatelessWidget {
                     horizontal: 15,
                     vertical: 10,
                   ),
-                  padding: const EdgeInsets.all(6),
+                  padding: EdgeInsets.all(6),
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: Colors.deepPurple,
+                      color: Theme.of(context).primaryColorDark,
                       width: 2,
                     ),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    "Rs.${txn.amount}",
-                    style: const TextStyle(
+                    "Rs.${_userTransactions[index].amount}",
+                    style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
-                        color: Colors.deepPurple),
+                        color: Theme.of(context).primaryColor),
                   ),
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text(_userTransactions[index].title,
+                        style: Theme.of(context).textTheme.titleLarge),
                     Text(
-                      txn.title,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      DateFormat.yMMMMd().format(txn.date),
+                      DateFormat.yMMMMd().format(_userTransactions[index].date),
                       style: const TextStyle(
                         fontSize: 15,
                         color: Colors.black45,
@@ -61,7 +57,7 @@ class TransactionsList extends StatelessWidget {
               ],
             ),
           );
-        }).toList(),
+        },
       ),
     );
   }

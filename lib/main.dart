@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
-import './widgets/user_transaction.dart';
+import './models/transaction.dart';
+
+import './widgets/new_transaction.dart';
+import './widgets/transaction_list.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,28 +16,103 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Personaal Expense',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green,
+        colorScheme: ThemeData().colorScheme.copyWith(secondary: Colors.red),
+        fontFamily: 'RobotoSlab',
+        appBarTheme: const AppBarTheme(
+          titleTextStyle: TextStyle(
+            fontFamily: 'RobotoCondensed',
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        textTheme: TextTheme(
+          titleLarge: TextStyle(
+            fontFamily: 'RobotoCondensed',
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+        ),
       ),
       home: MyHomePage(),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   MyHomePage({super.key});
 
-  // final String title;
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
 
-  final titleController = TextEditingController();
-  final amountController = TextEditingController();
+class _MyHomePageState extends State<MyHomePage> {
+  // final String title;
+  final List<Transaction> _transactions = [
+    Transaction(
+      id: "t1",
+      title: "Burger",
+      amount: 30,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: "t2",
+      title: "Bullets",
+      amount: 20,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: "t1",
+      title: "Half Burger",
+      amount: 95,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: "t1",
+      title: "Bus",
+      amount: 95,
+      date: DateTime.now(),
+    ),
+  ];
+
+  void _addNewTransaction(String txTitle, double txAmount) {
+    final txn = Transaction(
+      id: DateTime.now().toString(),
+      title: txTitle,
+      amount: txAmount,
+      date: DateTime.now(),
+    );
+    setState(() {
+      _transactions.add(txn);
+    });
+  }
+
+  void _startAddNewTransaction(BuildContext ctx) {
+    showModalBottomSheet(
+      context: ctx,
+      builder: (bctx) {
+        return NewTransaction(_addNewTransaction);
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Personel Expenses"),
+        actions: [
+          IconButton(
+            onPressed: () => _startAddNewTransaction(context),
+            icon: const Icon(Icons.add),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _startAddNewTransaction(context),
+        child: const Icon(Icons.add),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -51,7 +129,7 @@ class MyHomePage extends StatelessWidget {
                 child: const Text("Chart!! "),
               ),
             ),
-            UserTransactions(),
+            TransactionsList(_transactions),
           ],
         ),
       ),
